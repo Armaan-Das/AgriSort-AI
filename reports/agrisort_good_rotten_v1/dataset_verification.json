@@ -1,0 +1,61 @@
+{
+  "passed": true,
+  "problems": [],
+  "images": {
+    "train": {
+      "Good": 117,
+      "Rotten": 259
+    },
+    "val": {
+      "Good": 32,
+      "Rotten": 50
+    },
+    "test": {
+      "Good": 27,
+      "Rotten": 53
+    }
+  },
+  "groups": {
+    "train": {
+      "Good": 18,
+      "Rotten": 19
+    },
+    "val": {
+      "Good": 11,
+      "Rotten": 11
+    },
+    "test": {
+      "Good": 10,
+      "Rotten": 10
+    }
+  },
+  "capture_sessions": {
+    "train": {
+      "Good": 22,
+      "Rotten": 24
+    },
+    "val": {
+      "Good": 11,
+      "Rotten": 11
+    },
+    "test": {
+      "Good": 10,
+      "Rotten": 10
+    }
+  },
+  "groups_spanning_splits": 0,
+  "sessions_spanning_splits": 0,
+  "near_duplicate_pairs_across_splits": 0,
+  "identical_files_across_splits": 0,
+  "loose_similarity_threshold": 10,
+  "val_test_images_similar_to_a_train_image": {},
+  "min_phash_distance_val_test_to_train": {
+    "min": 12,
+    "median": 18.0
+  },
+  "time_window_seconds": 60,
+  "val_test_images_captured_near_a_train_image": {
+    "test": 28,
+    "val": 23
+  }
+}

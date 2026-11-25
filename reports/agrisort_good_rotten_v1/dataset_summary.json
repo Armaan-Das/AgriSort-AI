@@ -1,0 +1,46 @@
+{
+  "created_at": "2026-11-25T22:26:04",
+  "source": "FruitNet (Meshram & Patil 2022), Mendeley Data DOI 10.17632/b6fftwbr2v.3, CC BY 4.0",
+  "settings": {
+    "split": [
+      0.7,
+      0.15,
+      0.15
+    ],
+    "balance": false,
+    "ratio": 1.0,
+    "max_per_class": null,
+    "use_source_good": false,
+    "min_per_class": 20,
+    "classes": [
+      "Good",
+      "Rotten"
+    ],
+    "seed": 42
+  },
+  "label_files": [
+    "fruitnet_labels_all.csv"
+  ],
+  "label_conflicts_excluded": 0,
+  "counts": {
+    "train": {
+      "Good": 117,
+      "Rotten": 259
+    },
+    "val": {
+      "Good": 32,
+      "Rotten": 50
+    },
+    "test": {
+      "Good": 27,
+      "Rotten": 53
+    }
+  },
+  "totals_per_class": {
+    "Good": 176,
+    "Rotten": 362
+  },
+  "total_images": 538,
+  "unverified_images": 0,
+  "groups_split_across_sets": 0
+}

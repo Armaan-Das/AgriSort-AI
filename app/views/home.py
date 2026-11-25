@@ -3,7 +3,7 @@
 import streamlit as st
 
 from components.ui import class_card, footer, hero, info_card
-from core.config import APP_NAME, APP_TAGLINE, CLASS_DESCRIPTIONS, QUALITY_CLASSES
+from core.config import APP_NAME, APP_TAGLINE, CLASS_DESCRIPTIONS, PLANNED_CLASSES, QUALITY_CLASSES
 
 hero(APP_NAME, APP_TAGLINE, badge="Academic engineering project · Software-only prototype")
 
@@ -19,13 +19,14 @@ st.markdown("#### Quality categories")
 cols = st.columns(len(QUALITY_CLASSES))
 for col, name in zip(cols, QUALITY_CLASSES):
     with col:
-        class_card(name, CLASS_DESCRIPTIONS[name])
+        note = " (Planned: not yet predicted by model v1.)" if name in PLANNED_CLASSES else ""
+        class_card(name, CLASS_DESCRIPTIONS[name] + note)
 
 st.markdown("#### How it works")
 steps = [
     ("1 · Upload", "The user uploads a photo of an apple through the web interface."),
     ("2 · Pre-process", "OpenCV decodes the image and measures brightness, contrast and sharpness."),
-    ("3 · Classify", "A YOLO classification model (PyTorch) predicts Good, Damaged or Rotten."),
+    ("3 · Classify", "A trained YOLO11n-cls model (PyTorch) predicts Good or Rotten; Damaged is planned."),
     ("4 · Record", "Results are stored in SQLite and summarised on the Plotly dashboard."),
 ]
 cols = st.columns(len(steps))
@@ -35,9 +36,10 @@ for col, (title, body) in zip(cols, steps):
 
 st.write("")
 st.info(
-    "**Current stage:** the web interface, image processing and database are working. "
-    "The classification model has **not been trained yet**, so step 3 is not active.",
-    icon=":material/construction:",
+    "**Current stage:** prototype model v1 is trained and active. It classifies apples as "
+    "**Good** or **Rotten** (test balanced accuracy and limitations on the Model Information page). "
+    "Damaged-apple classification and multi-apple detection are planned for future development.",
+    icon=":material/science:",
 )
 
 c1, c2 = st.columns(2)

@@ -29,7 +29,7 @@ stack = pd.DataFrame(
         ("Web interface", "Streamlit", "Multi-page website and user interaction"),
         ("Language", "Python 3.12", "Application and ML code"),
         ("Deep learning", "PyTorch", "Neural network framework (Apple MPS GPU support)"),
-        ("Model", "Ultralytics YOLO", "Image classification model (to be trained)"),
+        ("Model", "Ultralytics YOLO11n-cls", "Image classification model v1 (trained: Good / Rotten)"),
         ("Image processing", "OpenCV", "Decoding, measurements, edge detection"),
         ("Database", "SQLite", "Local storage of analysis records"),
         ("Visualisation", "Plotly", "Interactive dashboard charts"),
@@ -41,10 +41,12 @@ st.dataframe(stack, hide_index=True, width="stretch")
 st.markdown("#### Development roadmap")
 roadmap = [
     ("Phase 1", "Web application, navigation, OpenCV analysis, SQLite history, dashboard", "Done"),
-    ("Phase 2", "Collect and label apple image dataset (Good / Damaged / Rotten)", "Not started"),
-    ("Phase 3", "Train YOLO classification model and evaluate on a test set", "Not started"),
-    ("Phase 4", "Integrate trained model into Analyse Apple page", "Not started"),
-    ("Phase 5", "Report real evaluation metrics on the dashboard", "Not started"),
+    ("Phase 2", "FruitNet apple dataset (CC BY 4.0): audit and manual relabelling, round 1", "Done"),
+    ("Phase 3", "Train YOLO11n-cls (Good vs Rotten) and evaluate on a held-out test set", "Done"),
+    ("Phase 4", "Integrate the trained model into Analyse Apple, History and Dashboard", "Done"),
+    ("Phase 5", "Report genuine evaluation metrics in the app (Model Information page)", "Done"),
+    ("Phase 6", "Add the Damaged class (more labelled data) and test on new photos", "Planned"),
+    ("Phase 7", "Detect and grade individual apples in multi-apple photos", "Planned"),
 ]
 for phase, task, status in roadmap:
     icon = ":material/check_circle:" if status == "Done" else ":material/radio_button_unchecked:"

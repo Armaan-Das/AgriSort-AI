@@ -18,16 +18,24 @@ MODELS_DIR = PROJECT_ROOT / "models"
 # so they never touch the real database).
 DB_PATH = Path(os.environ.get("AGRISORT_DB_PATH", DATA_DIR / "agrisort.db"))
 
-# Where the trained YOLO classification weights will be saved after training.
-# The file does NOT exist yet - the model has not been trained.
-MODEL_WEIGHTS_PATH = MODELS_DIR / "agrisort_yolo_cls.pt"
+# Trained model v1: YOLO11n-cls, Good vs Rotten (see reports/agrisort_good_rotten_v1/REPORT.md).
+# AGRISORT_MODEL_PATH can override the weights file (used by tests).
+MODEL_NAME = "agrisort_good_rotten_v1"
+MODEL_WEIGHTS_PATH = Path(os.environ.get("AGRISORT_MODEL_PATH", MODELS_DIR / f"{MODEL_NAME}.pt"))
+MODEL_REPORT_DIR = PROJECT_ROOT / "reports" / MODEL_NAME
+MODEL_CLASSES = ["Good", "Rotten"]      # classes the current model can predict
+PLANNED_CLASSES = ["Damaged"]           # planned for the final model
+MODEL_IMGSZ = 224
+# Single-image inference measured 3.6 ms on CPU vs 4.1 ms on MPS (see report), and CPU
+# avoids GPU threading issues inside the Streamlit server, so the app uses the CPU.
+MODEL_DEVICE = "cpu"
 
 # ---------------------------------------------------------------------------
 # Application metadata
 # ---------------------------------------------------------------------------
 APP_NAME = "AgriSort AI"
 APP_TAGLINE = "AI-powered visual quality grading for apples"
-APP_VERSION = "0.1.0 (prototype)"
+APP_VERSION = "0.2.0 (prototype, model v1)"
 
 # ---------------------------------------------------------------------------
 # Quality classes
@@ -41,11 +49,12 @@ CLASS_COLOURS = {
 }
 
 CLASS_DESCRIPTIONS = {
-    "Good": "Intact skin, uniform colour, no visible bruising or blemishes.",
+    "Good": "Intact, firm-looking skin with no visible decay, bruising, cuts or cracks. Natural "
+            "speckles, russeting and uneven colouring alone do not indicate damage or decay.",
     "Damaged": "Visible bruises, cuts, cracks or surface defects, but no decay.",
     "Rotten": "Signs of decay: soft brown patches, mould or fungal growth.",
 }
 
 # Upload constraints
-ALLOWED_IMAGE_TYPES = ["jpg", "jpeg", "png", "webp"]
+ALLOWED_IMAGE_TYPES = ["jpg", "jpeg", "png"]
 MAX_UPLOAD_MB = 10

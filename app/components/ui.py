@@ -49,8 +49,18 @@ _CSS = """
     }
 
     .as-footer { color: #8A978C; font-size: 0.8rem; text-align: center; margin-top: 3rem; }
+
+    .as-result {
+        border-radius: 14px; padding: 1.2rem 1.4rem; color: #FFFFFF; margin-bottom: 0.8rem;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10);
+    }
+    .as-result .as-result-label { font-size: 0.85rem; opacity: 0.9; letter-spacing: 0.04em; }
+    .as-result .as-result-class { font-size: 2.1rem; font-weight: 700; line-height: 1.2; }
+    .as-result .as-result-conf  { font-size: 1rem; opacity: 0.95; }
 </style>
 """
+
+_RESULT_ICONS = {"Good": "✔", "Rotten": "✖", "Damaged": "!"}
 
 
 def apply_global_styles() -> None:
@@ -85,6 +95,19 @@ def info_card(title: str, body: str, colour: str | None = None) -> None:
 
 def class_card(name: str, description: str) -> None:
     info_card(name, description, CLASS_COLOURS.get(name))
+
+
+def prediction_card(predicted_class: str, confidence: float) -> None:
+    """Large coloured result banner: green for Good, red for Rotten."""
+    colour = CLASS_COLOURS.get(predicted_class, "#455A64")
+    icon = _RESULT_ICONS.get(predicted_class, "")
+    st.markdown(
+        f'<div class="as-result" style="background:{colour}">'
+        f'<div class="as-result-label">PREDICTED QUALITY</div>'
+        f'<div class="as-result-class">{icon} {html.escape(predicted_class)}</div>'
+        f'<div class="as-result-conf">Model confidence: {confidence:.1%}</div></div>',
+        unsafe_allow_html=True,
+    )
 
 
 def status_box(text: str) -> None:

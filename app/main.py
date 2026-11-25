@@ -34,6 +34,7 @@ pages = {
         st.Page("views/history.py", title="History", icon=":material/history:"),
     ],
     "Project": [
+        st.Page("views/model_info.py", title="Model Information", icon=":material/model_training:"),
         st.Page("views/about.py", title="About", icon=":material/info:"),
     ],
 }
@@ -47,7 +48,8 @@ with st.sidebar:
     st.markdown("**Model status**")
     if is_model_available():
         st.success(model_status(), icon=":material/check_circle:")
+        st.caption("Damaged class and multi-apple detection: planned.")
     else:
-        st.warning(model_status(), icon=":material/pending:")
+        st.error(model_status(), icon=":material/error:")
 
 navigation.run()
