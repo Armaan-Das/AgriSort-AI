@@ -13,9 +13,9 @@ This is a software-only academic engineering project. There's no hardware or phy
 | SQLite history storage | Working |
 | Plotly dashboard (built from real saved records only) | Working |
 | Apple image dataset (FruitNet, CC BY 4.0) | Downloaded and audited, manual labelling in progress (see [docs/DATASET.md](docs/DATASET.md)) |
-| YOLO classification model | **Not trained yet** |
+| YOLO classification model | Prototype v1 trained (Good vs Rotten, YOLO11n-cls): test balanced accuracy 0.850, see [report](reports/agrisort_good_rotten_v1/REPORT.md). **Not yet connected to the website.** |
 
-The app doesn't show quality predictions yet. They'll be enabled after the model has been trained and evaluated.
+The app doesn't show quality predictions yet. A first Good-vs-Rotten model has been trained and evaluated, and connecting it to the Analyse page is the next step. Damaged is planned for the final model.
 
 ## Tech stack
 

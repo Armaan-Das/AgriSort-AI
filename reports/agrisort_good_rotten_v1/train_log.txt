@@ -1,0 +1,307 @@
+Ultralytics 8.4.218 🚀 Python-3.12.16 torch-2.15.0 MPS (Apple M4)
+[34m[1mengine/trainer: [0magnostic_nms=False, amp=True, angle=1.0, augment=False, auto_augment=randaugment, batch=16, bgr=0.0, box=7.5, cache=False, cfg=None, channels_last=None, classes=None, close_mosaic=10, cls=0.5, cls_pw=1.0, cls_remap=True, compile=False, conf=None, copy_paste=0.0, copy_paste_mode=flip, cos_lr=False, cutmix=0.0, data=<project-root>/data/processed/fruitnet_cls, degrees=0.0, deterministic=True, device=mps, dfl=1.5, dgrad=0.5, dis=6.0, distill_model=None, dlam=1.0, dlog=1.0, dnn=False, dropout=0.0, dynamic=False, embed=None, epochs=10, erasing=0.4, exist_ok=False, fliplr=0.5, flipud=0.0, format=torchscript, fraction=1.0, freeze=None, hsv_h=0.015, hsv_s=0.7, hsv_v=0.4, imgsz=224, iou=None, kobj=1.0, line_width=None, lr0=0.01, lrf=0.01, mask_ratio=4, max_det=300, mixup=0.0, mode=train, model=<project-root>/models/pretrained/yolo11n-cls.pt, momentum=0.937, mosaic=1.0, multi_scale=0.0, name=agrisort_good_rotten_v1, nbs=64, nms=None, opset=None, optimize=False, optimizer=auto, overlap_mask=True, patience=100, perspective=0.0, plots=True, pose=12.0, pretrained=True, profile=False, project=<project-root>/runs/classify, quantize=None, rect=False, resume=False, retina_masks=False, rle=1.0, save=True, save_conf=False, save_crop=False, save_dir=<project-root>/runs/classify/agrisort_good_rotten_v1, save_frames=False, save_json=False, save_period=-1, save_txt=False, scale=0.5, seed=42, shear=0.0, show=False, show_boxes=True, show_conf=True, show_labels=True, simplify=True, single_cls=False, source=None, split=val, stream_buffer=False, task=classify, tile=False, tile_overlap=0.2, time=None, tracker=tracktrack.yaml, translate=0.1, val=True, verbose=True, vid_stride=1, visualize=False, warmup_bias_lr=0.1, warmup_epochs=3.0, warmup_momentum=0.8, weight_decay=0.0005, workers=4, workspace=None
+[34m[1mtrain:[0m <project-root>/data/processed/fruitnet_cls/train... found 376 images in 2/2 classes ✅ 
+[34m[1mval:[0m <project-root>/data/processed/fruitnet_cls/val... found 82 images in 2/2 classes ✅ 
+[34m[1mtest:[0m <project-root>/data/processed/fruitnet_cls/test... found 80 images in 2/2 classes ✅ 
+Overriding model.yaml nc=80 with nc=2
+                   from  n    params  module                                       arguments                     
+  0                  -1  1       464  ultralytics.nn.modules.conv.Conv             [3, 16, 3, 2]                 
+  1                  -1  1      4672  ultralytics.nn.modules.conv.Conv             [16, 32, 3, 2]                
+  2                  -1  1      6640  ultralytics.nn.modules.block.C3k2            [32, 64, 1, False, 0.25]      
+  3                  -1  1     36992  ultralytics.nn.modules.conv.Conv             [64, 64, 3, 2]                
+  4                  -1  1     26080  ultralytics.nn.modules.block.C3k2            [64, 128, 1, False, 0.25]     
+  5                  -1  1    147712  ultralytics.nn.modules.conv.Conv             [128, 128, 3, 2]              
+  6                  -1  1     87040  ultralytics.nn.modules.block.C3k2            [128, 128, 1, True]           
+  7                  -1  1    295424  ultralytics.nn.modules.conv.Conv             [128, 256, 3, 2]              
+  8                  -1  1    346112  ultralytics.nn.modules.block.C3k2            [256, 256, 1, True]           
+  9                  -1  1    249728  ultralytics.nn.modules.block.C2PSA           [256, 256, 1]                 
+ 10                  -1  1    332802  ultralytics.nn.modules.head.Classify         [256, 2]                      
+YOLO11n-cls summary: 86 layers, 1,533,666 parameters, 1,533,666 gradients, 3.3 GFLOPs
+Transferred 234/236 items from pretrained weights
+[34m[1mtrain: [0mFast image access ✅ (ping: 0.0±0.0 ms, read: 953.2±338.1 MB/s, size: 24.7 KB)
+[K[34m[1mtrain: [0mScanning <project-root>/data/processed/fruitnet_cls/train... 376 images, 0 corrupt: 100% ━━━━━━━━━━━━ 376/376 175.2Mit/s 0.0s
+[34m[1mval: [0mFast image access ✅ (ping: 0.0±0.0 ms, read: 695.4±487.3 MB/s, size: 14.9 KB)
+[K[34m[1mval: [0mScanning <project-root>/data/processed/fruitnet_cls/val... 82 images, 0 corrupt: 100% ━━━━━━━━━━━━ 82/82 86.0Mit/s 0.0s
+[34m[1moptimizer:[0m 'optimizer=auto' found, ignoring 'lr0=0.01' and determining best 'optimizer' and 'lr0' automatically... 
+[34m[1moptimizer:[0m AdamW(lr=0.001667, momentum=0.9) with parameter groups 39 weight(decay=0.0), 40 weight(decay=0.0005), 40 bias(decay=0.0)
+Class weights: [      1.378       0.622]
+[34m[1mtrain-eval: [0mFast image access ✅ (ping: 0.0±0.0 ms, read: 1535.7±512.0 MB/s, size: 24.7 KB)
+[K[34m[1mtrain-eval: [0mScanning <project-root>/data/processed/fruitnet_cls/train... 376 images, 0 corrupt: 100% ━━━━━━━━━━━━ 376/376 394.3Mit/s 0.0s
+Using 376 train, 82 val images for fraction=1.0 at imgsz=224
+Using 0 dataloader workers
+Logging results to [1m<project-root>/runs/classify/agrisort_good_rotten_v1[0m
+Starting training for 10 epochs...
+      Epoch    GPU_mem       loss  Instances       Size
+[K       1/10      1.13G     0.6627         16        224: 0% ──────────── 0/24  0.3s
+[K       1/10      1.13G     0.6966         16        224: 4% ──────────── 1/24 2.5it/s 0.4s<9.4s
+[K       1/10      1.13G     0.6593         16        224: 12% ━─────────── 3/24 5.9it/s 0.6s<3.5s
+[K       1/10      1.13G      0.662         16        224: 20% ━━────────── 5/24 8.9it/s 0.7s<2.1s
+[K       1/10      1.13G     0.6385         16        224: 29% ━━━───────── 7/24 10.9it/s 0.8s<1.6s
+[K       1/10      1.13G     0.5856         16        224: 37% ━━━━──────── 9/24 12.2it/s 1.0s<1.2s
+[K       1/10      1.13G     0.5507         16        224: 45% ━━━━━─────── 11/24 13.1it/s 1.1s<1.0s
+[K       1/10      1.13G     0.5252         16        224: 54% ━━━━━━────── 13/24 14.0it/s 1.2s<0.8s
+[K       1/10      1.13G     0.5107         16        224: 62% ━━━━━━━───── 15/24 14.6it/s 1.4s<0.6s
+[K       1/10      1.13G     0.4944         16        224: 70% ━━━━━━━━──── 17/24 15.1it/s 1.5s<0.5s
+[K       1/10      1.13G     0.4827         16        224: 79% ━━━━━━━━━─── 19/24 15.4it/s 1.6s<0.3s
+[K       1/10      1.13G     0.4671         16        224: 87% ━━━━━━━━━━── 21/24 15.6it/s 1.7s<0.2s
+[K       1/10      1.14G     0.4532          8        224: 95% ━━━━━━━━━━━─ 23/24 12.8it/s 2.0s<0.1s
+[K       1/10      1.14G     0.4532          8        224: 100% ━━━━━━━━━━━━ 24/24 11.7it/s 2.0s
+[K               classes   top1_acc   top5_acc: 33% ━━━━──────── 1/3 2.5it/s 0.1s<0.8s
+[K               classes   top1_acc   top5_acc: 100% ━━━━━━━━━━━━ 3/3 11.9it/s 0.3s
+                   all       0.78          1
+[AgriSort] epoch 1: train_loss=0.45324 train_acc=0.94149 val_loss=0.50962 val_acc=0.78049
+      Epoch    GPU_mem       loss  Instances       Size
+[K       2/10      1.16G    0.07646         16        224: 0% ──────────── 0/24  0.3s
+[K       2/10      1.16G    0.09651         16        224: 8% ━─────────── 2/24 4.3it/s 0.4s<5.1s
+[K       2/10      1.16G     0.2044         16        224: 16% ━━────────── 4/24 7.4it/s 0.5s<2.7s
+[K       2/10      1.16G     0.2131         16        224: 25% ━━━───────── 6/24 10.0it/s 0.7s<1.8s
+[K       2/10      1.16G     0.2012         16        224: 33% ━━━━──────── 8/24 11.7it/s 0.8s<1.4s
+[K       2/10      1.16G     0.1861         16        224: 41% ━━━━━─────── 10/24 13.0it/s 0.9s<1.1s
+[K       2/10      1.16G     0.2087         16        224: 50% ━━━━━━────── 12/24 13.9it/s 1.0s<0.9s
+[K       2/10      1.16G     0.2037         16        224: 58% ━━━━━━━───── 14/24 14.5it/s 1.2s<0.7s
+[K       2/10      1.16G     0.2074         16        224: 66% ━━━━━━━━──── 16/24 15.1it/s 1.3s<0.5s
+[K       2/10      1.16G     0.1992         16        224: 75% ━━━━━━━━━─── 18/24 15.3it/s 1.4s<0.4s
+[K       2/10      1.16G     0.1992         16        224: 83% ━━━━━━━━━━── 20/24 15.5it/s 1.5s<0.3s
+[K       2/10      1.16G     0.2081         16        224: 91% ━━━━━━━━━━━─ 22/24 15.9it/s 1.7s<0.1s
+[K       2/10      1.16G     0.2034          8        224: 95% ━━━━━━━━━━━─ 23/24 12.4it/s 1.9s<0.1s
+[K       2/10      1.16G     0.2034          8        224: 100% ━━━━━━━━━━━━ 24/24 12.7it/s 1.9s
+[K               classes   top1_acc   top5_acc: 33% ━━━━──────── 1/3 2.8it/s 0.1s<0.7s
+[K               classes   top1_acc   top5_acc: 100% ━━━━━━━━━━━━ 3/3 12.4it/s 0.2s
+                   all      0.768          1
+[AgriSort] epoch 2: train_loss=0.20336 train_acc=0.94947 val_loss=0.46459 val_acc=0.76829
+      Epoch    GPU_mem       loss  Instances       Size
+[K       3/10      1.16G     0.1315         16        224: 0% ──────────── 0/24  0.3s
+[K       3/10      1.16G     0.1526         16        224: 8% ━─────────── 2/24 4.7it/s 0.4s<4.7s
+[K       3/10      1.16G     0.1465         16        224: 16% ━━────────── 4/24 7.9it/s 0.5s<2.5s
+[K       3/10      1.16G     0.1528         16        224: 25% ━━━───────── 6/24 10.2it/s 0.6s<1.8s
+[K       3/10      1.16G     0.1496         16        224: 33% ━━━━──────── 8/24 11.6it/s 0.8s<1.4s
+[K       3/10      1.16G     0.1649         16        224: 41% ━━━━━─────── 10/24 12.7it/s 0.9s<1.1s
+[K       3/10      1.16G     0.1805         16        224: 50% ━━━━━━────── 12/24 13.7it/s 1.0s<0.9s
+[K       3/10      1.16G      0.202         16        224: 58% ━━━━━━━───── 14/24 14.5it/s 1.2s<0.7s
+[K       3/10      1.16G     0.1963         16        224: 66% ━━━━━━━━──── 16/24 15.0it/s 1.3s<0.5s
+[K       3/10      1.16G     0.1801         16        224: 75% ━━━━━━━━━─── 18/24 14.6it/s 1.4s<0.4s
+[K       3/10      1.16G     0.1711         16        224: 83% ━━━━━━━━━━── 20/24 14.8it/s 1.6s<0.3s
+[K       3/10      1.16G     0.1694         16        224: 91% ━━━━━━━━━━━─ 22/24 15.3it/s 1.7s<0.1s
+[K       3/10      1.16G     0.1662          8        224: 95% ━━━━━━━━━━━─ 23/24 11.9it/s 1.9s<0.1s
+[K       3/10      1.16G     0.1662          8        224: 100% ━━━━━━━━━━━━ 24/24 12.4it/s 1.9s
+[K               classes   top1_acc   top5_acc: 33% ━━━━──────── 1/3 2.5it/s 0.1s<0.8s
+[K               classes   top1_acc   top5_acc: 100% ━━━━━━━━━━━━ 3/3 11.8it/s 0.3s
+                   all       0.78          1
+[AgriSort] epoch 3: train_loss=0.16622 train_acc=0.97872 val_loss=0.5164 val_acc=0.78049
+      Epoch    GPU_mem       loss  Instances       Size
+[K       4/10      1.16G     0.2995         16        224: 0% ──────────── 0/24  0.3s
+[K       4/10      1.16G     0.3813         16        224: 8% ━─────────── 2/24 5.0it/s 0.4s<4.4s
+[K       4/10      1.16G     0.3331         16        224: 16% ━━────────── 4/24 8.2it/s 0.5s<2.4s
+[K       4/10      1.16G     0.2949         16        224: 25% ━━━───────── 6/24 10.7it/s 0.6s<1.7s
+[K       4/10      1.16G     0.2617         16        224: 33% ━━━━──────── 8/24 12.3it/s 0.8s<1.3s
+[K       4/10      1.16G     0.2454         16        224: 41% ━━━━━─────── 10/24 13.6it/s 0.9s<1.0s
+[K       4/10      1.16G      0.238         16        224: 50% ━━━━━━────── 12/24 14.3it/s 1.0s<0.8s
+[K       4/10      1.16G     0.2214         16        224: 58% ━━━━━━━───── 14/24 14.9it/s 1.1s<0.7s
+[K       4/10      1.16G     0.2492         16        224: 66% ━━━━━━━━──── 16/24 15.3it/s 1.3s<0.5s
+[K       4/10      1.16G     0.2357         16        224: 75% ━━━━━━━━━─── 18/24 15.8it/s 1.4s<0.4s
+[K       4/10      1.16G     0.2273         16        224: 83% ━━━━━━━━━━── 20/24 15.9it/s 1.5s<0.3s
+[K       4/10      1.16G     0.2268         16        224: 91% ━━━━━━━━━━━─ 22/24 16.0it/s 1.6s<0.1s
+[K       4/10      1.16G     0.2183          8        224: 95% ━━━━━━━━━━━─ 23/24 12.5it/s 1.9s<0.1s
+[K       4/10      1.16G     0.2183          8        224: 100% ━━━━━━━━━━━━ 24/24 12.9it/s 1.9s
+[K               classes   top1_acc   top5_acc: 33% ━━━━──────── 1/3 2.7it/s 0.1s<0.7s
+[K               classes   top1_acc   top5_acc: 100% ━━━━━━━━━━━━ 3/3 12.4it/s 0.2s
+                   all      0.707          1
+[AgriSort] epoch 4: train_loss=0.21833 train_acc=0.94681 val_loss=0.75543 val_acc=0.70732
+      Epoch    GPU_mem       loss  Instances       Size
+[K       5/10      1.16G     0.4909         16        224: 0% ──────────── 0/24  0.3s
+[K       5/10      1.16G     0.2456         16        224: 8% ━─────────── 2/24 5.0it/s 0.4s<4.4s
+[K       5/10      1.16G     0.1855         16        224: 16% ━━────────── 4/24 7.8it/s 0.5s<2.6s
+[K       5/10      1.16G     0.1661         16        224: 25% ━━━───────── 6/24 10.1it/s 0.7s<1.8s
+[K       5/10      1.16G     0.1978         16        224: 33% ━━━━──────── 8/24 11.9it/s 0.8s<1.3s
+[K       5/10      1.16G     0.1893         16        224: 41% ━━━━━─────── 10/24 13.3it/s 0.9s<1.1s
+[K       5/10      1.16G     0.1773         16        224: 50% ━━━━━━────── 12/24 14.1it/s 1.0s<0.9s
+[K       5/10      1.16G     0.1903         16        224: 58% ━━━━━━━───── 14/24 14.9it/s 1.2s<0.7s
+[K       5/10      1.16G     0.1811         16        224: 66% ━━━━━━━━──── 16/24 15.1it/s 1.3s<0.5s
+[K       5/10      1.16G     0.1732         16        224: 75% ━━━━━━━━━─── 18/24 15.6it/s 1.4s<0.4s
+[K       5/10      1.16G     0.1624         16        224: 83% ━━━━━━━━━━── 20/24 15.8it/s 1.5s<0.3s
+[K       5/10      1.16G     0.1532         16        224: 91% ━━━━━━━━━━━─ 22/24 16.1it/s 1.6s<0.1s
+[K       5/10      1.16G     0.1523          8        224: 95% ━━━━━━━━━━━─ 23/24 12.5it/s 1.9s<0.1s
+[K       5/10      1.16G     0.1523          8        224: 100% ━━━━━━━━━━━━ 24/24 12.8it/s 1.9s
+[K               classes   top1_acc   top5_acc: 33% ━━━━──────── 1/3 2.6it/s 0.1s<0.8s
+[K               classes   top1_acc   top5_acc: 100% ━━━━━━━━━━━━ 3/3 12.1it/s 0.2s
+                   all      0.683          1
+[AgriSort] epoch 5: train_loss=0.15232 train_acc=0.97872 val_loss=0.59182 val_acc=0.68293
+      Epoch    GPU_mem       loss  Instances       Size
+[K       6/10      1.16G    0.09139         16        224: 0% ──────────── 0/24  0.3s
+[K       6/10      1.16G    0.06659         16        224: 8% ━─────────── 2/24 5.0it/s 0.4s<4.4s
+[K       6/10      1.16G     0.1056         16        224: 16% ━━────────── 4/24 8.3it/s 0.5s<2.4s
+[K       6/10      1.16G     0.1376         16        224: 25% ━━━───────── 6/24 10.9it/s 0.6s<1.7s
+[K       6/10      1.16G     0.1346         16        224: 33% ━━━━──────── 8/24 12.3it/s 0.7s<1.3s
+[K       6/10      1.16G     0.1825         16        224: 41% ━━━━━─────── 10/24 13.6it/s 0.9s<1.0s
+[K       6/10      1.16G      0.174         16        224: 50% ━━━━━━────── 12/24 14.3it/s 1.0s<0.8s
+[K       6/10      1.16G     0.1709         16        224: 58% ━━━━━━━───── 14/24 14.9it/s 1.1s<0.7s
+[K       6/10      1.16G      0.156         16        224: 66% ━━━━━━━━──── 16/24 15.2it/s 1.2s<0.5s
+[K       6/10      1.16G     0.1466         16        224: 75% ━━━━━━━━━─── 18/24 15.8it/s 1.4s<0.4s
+[K       6/10      1.16G     0.1385         16        224: 83% ━━━━━━━━━━── 20/24 15.8it/s 1.5s<0.3s
+[K       6/10      1.16G     0.1358         16        224: 91% ━━━━━━━━━━━─ 22/24 15.9it/s 1.6s<0.1s
+[K       6/10      1.16G     0.1308          8        224: 95% ━━━━━━━━━━━─ 23/24 12.4it/s 1.8s<0.1s
+[K       6/10      1.16G     0.1308          8        224: 100% ━━━━━━━━━━━━ 24/24 13.0it/s 1.8s
+[K               classes   top1_acc   top5_acc: 33% ━━━━──────── 1/3 2.6it/s 0.1s<0.8s
+[K               classes   top1_acc   top5_acc: 100% ━━━━━━━━━━━━ 3/3 12.1it/s 0.2s
+                   all      0.793          1
+[AgriSort] epoch 6: train_loss=0.13077 train_acc=0.98936 val_loss=0.44663 val_acc=0.79268
+      Epoch    GPU_mem       loss  Instances       Size
+[K       7/10      1.16G     0.1392         16        224: 0% ──────────── 0/24  0.3s
+[K       7/10      1.16G     0.1142         16        224: 8% ━─────────── 2/24 5.1it/s 0.4s<4.4s
+[K       7/10      1.16G     0.1051         16        224: 16% ━━────────── 4/24 8.2it/s 0.5s<2.4s
+[K       7/10      1.16G     0.0965         16        224: 25% ━━━───────── 6/24 10.9it/s 0.6s<1.6s
+[K       7/10      1.16G     0.1175         16        224: 33% ━━━━──────── 8/24 12.4it/s 0.7s<1.3s
+[K       7/10      1.16G     0.1122         16        224: 41% ━━━━━─────── 10/24 13.6it/s 0.9s<1.0s
+[K       7/10      1.16G     0.1207         16        224: 50% ━━━━━━────── 12/24 14.3it/s 1.0s<0.8s
+[K       7/10      1.16G     0.1173         16        224: 58% ━━━━━━━───── 14/24 14.3it/s 1.1s<0.7s
+[K       7/10      1.16G     0.1195         16        224: 66% ━━━━━━━━──── 16/24 14.8it/s 1.3s<0.5s
+[K       7/10      1.16G      0.123         16        224: 75% ━━━━━━━━━─── 18/24 15.3it/s 1.4s<0.4s
+[K       7/10      1.16G     0.1234         16        224: 83% ━━━━━━━━━━── 20/24 15.5it/s 1.5s<0.3s
+[K       7/10      1.16G     0.1309         16        224: 91% ━━━━━━━━━━━─ 22/24 15.9it/s 1.6s<0.1s
+[K       7/10      1.16G     0.1274          8        224: 95% ━━━━━━━━━━━─ 23/24 12.4it/s 1.9s<0.1s
+[K       7/10      1.16G     0.1274          8        224: 100% ━━━━━━━━━━━━ 24/24 12.9it/s 1.9s
+[K               classes   top1_acc   top5_acc: 33% ━━━━──────── 1/3 2.5it/s 0.1s<0.8s
+[K               classes   top1_acc   top5_acc: 100% ━━━━━━━━━━━━ 3/3 12.0it/s 0.3s
+                   all      0.793          1
+[AgriSort] epoch 7: train_loss=0.12745 train_acc=0.99734 val_loss=0.43185 val_acc=0.79268
+      Epoch    GPU_mem       loss  Instances       Size
+[K       8/10      1.16G     0.1871         16        224: 0% ──────────── 0/24  0.3s
+[K       8/10      1.16G    0.07992         16        224: 8% ━─────────── 2/24 5.1it/s 0.4s<4.3s
+[K       8/10      1.16G    0.07918         16        224: 16% ━━────────── 4/24 8.3it/s 0.5s<2.4s
+[K       8/10      1.16G     0.1088         16        224: 25% ━━━───────── 6/24 10.8it/s 0.6s<1.7s
+[K       8/10      1.16G     0.1007         16        224: 33% ━━━━──────── 8/24 12.3it/s 0.7s<1.3s
+[K       8/10      1.16G    0.09224         16        224: 41% ━━━━━─────── 10/24 13.6it/s 0.9s<1.0s
+[K       8/10      1.16G    0.08736         16        224: 50% ━━━━━━────── 12/24 14.2it/s 1.0s<0.8s
+[K       8/10      1.16G    0.07857         16        224: 58% ━━━━━━━───── 14/24 15.0it/s 1.1s<0.7s
+[K       8/10      1.16G     0.0832         16        224: 66% ━━━━━━━━──── 16/24 15.3it/s 1.2s<0.5s
+[K       8/10      1.16G     0.0805         16        224: 75% ━━━━━━━━━─── 18/24 15.7it/s 1.4s<0.4s
+[K       8/10      1.16G    0.07997         16        224: 83% ━━━━━━━━━━── 20/24 15.8it/s 1.5s<0.3s
+[K       8/10      1.16G    0.07866         16        224: 91% ━━━━━━━━━━━─ 22/24 16.1it/s 1.6s<0.1s
+[K       8/10      1.16G    0.07997          8        224: 95% ━━━━━━━━━━━─ 23/24 12.5it/s 1.8s<0.1s
+[K       8/10      1.16G    0.07997          8        224: 100% ━━━━━━━━━━━━ 24/24 13.0it/s 1.8s
+[K               classes   top1_acc   top5_acc: 33% ━━━━──────── 1/3 2.7it/s 0.1s<0.7s
+[K               classes   top1_acc   top5_acc: 100% ━━━━━━━━━━━━ 3/3 12.2it/s 0.2s
+                   all      0.841          1
+[AgriSort] epoch 8: train_loss=0.07997 train_acc=0.99468 val_loss=0.41825 val_acc=0.84146
+      Epoch    GPU_mem       loss  Instances       Size
+[K       9/10      1.16G    0.02981         16        224: 0% ──────────── 0/24  0.3s
+[K       9/10      1.16G    0.08451         16        224: 8% ━─────────── 2/24 5.1it/s 0.4s<4.3s
+[K       9/10      1.16G    0.06956         16        224: 16% ━━────────── 4/24 8.4it/s 0.5s<2.4s
+[K       9/10      1.16G    0.05452         16        224: 25% ━━━───────── 6/24 10.9it/s 0.6s<1.6s
+[K       9/10      1.16G    0.08621         16        224: 33% ━━━━──────── 8/24 12.5it/s 0.7s<1.3s
+[K       9/10      1.16G    0.08491         16        224: 41% ━━━━━─────── 10/24 13.7it/s 0.9s<1.0s
+[K       9/10      1.16G    0.08373         16        224: 50% ━━━━━━────── 12/24 14.3it/s 1.0s<0.8s
+[K       9/10      1.16G    0.08786         16        224: 58% ━━━━━━━───── 14/24 15.0it/s 1.1s<0.7s
+[K       9/10      1.16G    0.08274         16        224: 66% ━━━━━━━━──── 16/24 15.2it/s 1.2s<0.5s
+[K       9/10      1.16G    0.07756         16        224: 75% ━━━━━━━━━─── 18/24 15.7it/s 1.4s<0.4s
+[K       9/10      1.16G     0.0748         16        224: 83% ━━━━━━━━━━── 20/24 15.8it/s 1.5s<0.3s
+[K       9/10      1.16G    0.09162         16        224: 91% ━━━━━━━━━━━─ 22/24 16.1it/s 1.6s<0.1s
+[K       9/10      1.16G    0.09811          8        224: 95% ━━━━━━━━━━━─ 23/24 12.5it/s 1.8s<0.1s
+[K       9/10      1.16G    0.09811          8        224: 100% ━━━━━━━━━━━━ 24/24 13.0it/s 1.8s
+[K               classes   top1_acc   top5_acc: 33% ━━━━──────── 1/3 2.5it/s 0.1s<0.8s
+[K               classes   top1_acc   top5_acc: 100% ━━━━━━━━━━━━ 3/3 11.8it/s 0.3s
+                   all      0.793          1
+[AgriSort] epoch 9: train_loss=0.09811 train_acc=0.98936 val_loss=0.44031 val_acc=0.79268
+      Epoch    GPU_mem       loss  Instances       Size
+[K      10/10      1.16G    0.07196         16        224: 0% ──────────── 0/24  0.3s
+[K      10/10      1.16G    0.05681         16        224: 8% ━─────────── 2/24 5.0it/s 0.4s<4.4s
+[K      10/10      1.16G     0.0781         16        224: 16% ━━────────── 4/24 8.2it/s 0.5s<2.4s
+[K      10/10      1.16G    0.07271         16        224: 25% ━━━───────── 6/24 10.8it/s 0.6s<1.7s
+[K      10/10      1.16G    0.06491         16        224: 33% ━━━━──────── 8/24 12.2it/s 0.8s<1.3s
+[K      10/10      1.16G    0.07781         16        224: 41% ━━━━━─────── 10/24 13.4it/s 0.9s<1.0s
+[K      10/10      1.16G     0.0707         16        224: 50% ━━━━━━────── 12/24 14.1it/s 1.0s<0.8s
+[K      10/10      1.16G    0.07026         16        224: 58% ━━━━━━━───── 14/24 14.9it/s 1.1s<0.7s
+[K      10/10      1.16G    0.08147         16        224: 66% ━━━━━━━━──── 16/24 15.2it/s 1.2s<0.5s
+[K      10/10      1.16G     0.0773         16        224: 75% ━━━━━━━━━─── 18/24 15.7it/s 1.4s<0.4s
+[K      10/10      1.16G    0.08109         16        224: 83% ━━━━━━━━━━── 20/24 15.8it/s 1.5s<0.3s
+[K      10/10      1.16G    0.08348         16        224: 91% ━━━━━━━━━━━─ 22/24 16.0it/s 1.6s<0.1s
+[K      10/10      1.16G    0.08138          8        224: 95% ━━━━━━━━━━━─ 23/24 12.4it/s 1.9s<0.1s
+[K      10/10      1.16G    0.08138          8        224: 100% ━━━━━━━━━━━━ 24/24 12.9it/s 1.9s
+[K               classes   top1_acc   top5_acc: 33% ━━━━──────── 1/3 2.4it/s 0.1s<0.8s
+[K               classes   top1_acc   top5_acc: 100% ━━━━━━━━━━━━ 3/3 11.4it/s 0.3s
+                   all       0.78          1
+[AgriSort] epoch 10: train_loss=0.08138 train_acc=0.99202 val_loss=0.42706 val_acc=0.78049
+10 epochs completed in 0.009 hours.
+Optimizer stripped from <project-root>/runs/classify/agrisort_good_rotten_v1/weights/last.pt, 3.2MB
+Optimizer stripped from <project-root>/runs/classify/agrisort_good_rotten_v1/weights/best.pt, 3.2MB
+Validating <project-root>/runs/classify/agrisort_good_rotten_v1/weights/best.pt...
+Ultralytics 8.4.218 🚀 Python-3.12.16 torch-2.15.0 MPS (Apple M4)
+YOLO11n-cls summary (fused): 47 layers, 1,528,586 parameters, 0 gradients, 3.2 GFLOPs
+[34m[1mtrain:[0m <project-root>/data/processed/fruitnet_cls/train... found 376 images in 2/2 classes ✅ 
+[34m[1mval:[0m <project-root>/data/processed/fruitnet_cls/val... found 82 images in 2/2 classes ✅ 
+[34m[1mtest:[0m <project-root>/data/processed/fruitnet_cls/test... found 80 images in 2/2 classes ✅ 
+[K               classes   top1_acc   top5_acc: 33% ━━━━──────── 1/3 2.3s/it 0.7s<4.6s
+[K               classes   top1_acc   top5_acc: 100% ━━━━━━━━━━━━ 3/3 3.3it/s 0.9s
+                   all      0.841          1
+Speed: 0.1ms preprocess, 9.6ms inference, 0.0ms loss, 0.0ms postprocess per image
+Results saved to [1m<project-root>/runs/classify/agrisort_good_rotten_v1[0m
+[AgriSort] epoch 11: train_loss=0.08138 train_acc=0.99202 val_loss=nan val_acc=0.84146
+{
+  "run": "agrisort_good_rotten_v1",
+  "started": "2026-11-25T22:31:10",
+  "training_duration_seconds": 38.0,
+  "device_used": "mps",
+  "mps_fallback_reason": null,
+  "hardware": {
+    "machine": "arm64",
+    "platform": "macOS-27.2.1-arm64-arm-64bit",
+    "torch": "2.15.0",
+    "ultralytics": "8.4.218",
+    "python": "3.12.16"
+  },
+  "settings": {
+    "data": "<project-root>/data/processed/fruitnet_cls",
+    "epochs": 10,
+    "imgsz": 224,
+    "batch": 16,
+    "seed": 42,
+    "deterministic": true,
+    "cls_pw": 1.0,
+    "pretrained": true,
+    "name": "agrisort_good_rotten_v1",
+    "exist_ok": false,
+    "plots": true,
+    "workers": 4,
+    "verbose": true,
+    "pretrained_weights": "models/pretrained/yolo11n-cls.pt"
+  },
+  "class_weight_check": {
+    "class_names": [
+      "Good",
+      "Rotten"
+    ],
+    "train_image_counts": [
+      117.0,
+      259.0
+    ],
+    "expected_weights": [
+      1.3776999711990356,
+      0.6223000288009644
+    ],
+    "model_class_weights": [
+      1.3776999711990356,
+      0.6223000288009644
+    ],
+    "loss_function_class_weights": [
+      1.3776999711990356,
+      0.6223000288009644
+    ],
+    "loss_function": "v8ClassificationLoss",
+    "applied_correctly": true
+  },
+  "best_epoch_by_val_accuracy": {
+    "epoch": 8,
+    "train_loss": 0.07997,
+    "train_accuracy": 0.99468,
+    "val_loss": 0.41825,
+    "val_accuracy": 0.84146,
+    "lr": 0.0005118
+  },
+  "note_best_checkpoint": "Ultralytics saves best.pt at the epoch with the highest validation fitness (top-1 accuracy for classification).",
+  "weights": {
+    "best": "models/agrisort_good_rotten_v1.pt",
+    "run_dir": "runs/classify/agrisort_good_rotten_v1"
+  },
+  "test_set_used": false
+}
+exit: 

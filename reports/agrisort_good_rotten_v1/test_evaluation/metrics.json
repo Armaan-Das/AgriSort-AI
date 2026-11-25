@@ -1,0 +1,72 @@
+{
+  "model": "models/agrisort_good_rotten_v1.pt",
+  "split": "test",
+  "n_images": 80,
+  "n_independent_groups": 17,
+  "class_support": {
+    "Good": 27,
+    "Rotten": 53
+  },
+  "accuracy": 0.8375,
+  "balanced_accuracy": 0.8501,
+  "per_class": {
+    "Good": {
+      "precision": 0.7059,
+      "recall": 0.8889,
+      "f1": 0.7869,
+      "support": 27
+    },
+    "Rotten": {
+      "precision": 0.9348,
+      "recall": 0.8113,
+      "f1": 0.8687,
+      "support": 53
+    }
+  },
+  "macro_f1": 0.8278,
+  "confusion_matrix": {
+    "labels": [
+      "Good",
+      "Rotten"
+    ],
+    "rows_true_cols_pred": [
+      [
+        24,
+        3
+      ],
+      [
+        10,
+        43
+      ]
+    ]
+  },
+  "group_bootstrap_95ci": {
+    "accuracy": [
+      0.7544,
+      0.9206
+    ],
+    "balanced_accuracy": [
+      0.7248,
+      0.9269
+    ],
+    "resamples_used": 2000,
+    "unit": "leakage group"
+  },
+  "misclassified": 13,
+  "inference_time_per_image": {
+    "mps": {
+      "mean_ms": 4.07,
+      "median_ms": 3.92,
+      "p95_ms": 5.05,
+      "n_images": 80,
+      "includes": "image loading, preprocessing, model forward pass and postprocessing (batch size 1)"
+    },
+    "cpu": {
+      "mean_ms": 3.65,
+      "median_ms": 3.63,
+      "p95_ms": 3.88,
+      "n_images": 80,
+      "includes": "image loading, preprocessing, model forward pass and postprocessing (batch size 1)"
+    }
+  }
+}

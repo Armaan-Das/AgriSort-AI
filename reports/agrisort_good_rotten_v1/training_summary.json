@@ -1,0 +1,70 @@
+{
+  "run": "agrisort_good_rotten_v1",
+  "started": "2026-11-25T22:31:10",
+  "training_duration_seconds": 38.0,
+  "device_used": "mps",
+  "mps_fallback_reason": null,
+  "hardware": {
+    "machine": "arm64",
+    "platform": "macOS-27.2.1-arm64-arm-64bit",
+    "torch": "2.15.0",
+    "ultralytics": "8.4.218",
+    "python": "3.12.16"
+  },
+  "settings": {
+    "data": "<project-root>/data/processed/fruitnet_cls",
+    "epochs": 10,
+    "imgsz": 224,
+    "batch": 16,
+    "seed": 42,
+    "deterministic": true,
+    "cls_pw": 1.0,
+    "pretrained": true,
+    "name": "agrisort_good_rotten_v1",
+    "exist_ok": false,
+    "plots": true,
+    "workers": 4,
+    "verbose": true,
+    "pretrained_weights": "models/pretrained/yolo11n-cls.pt"
+  },
+  "class_weight_check": {
+    "class_names": [
+      "Good",
+      "Rotten"
+    ],
+    "train_image_counts": [
+      117.0,
+      259.0
+    ],
+    "expected_weights": [
+      1.3776999711990356,
+      0.6223000288009644
+    ],
+    "model_class_weights": [
+      1.3776999711990356,
+      0.6223000288009644
+    ],
+    "loss_function_class_weights": [
+      1.3776999711990356,
+      0.6223000288009644
+    ],
+    "loss_function": "v8ClassificationLoss",
+    "applied_correctly": true
+  },
+  "best_epoch_by_val_accuracy": {
+    "epoch": 8,
+    "train_loss": 0.07997,
+    "train_accuracy": 0.99468,
+    "val_loss": 0.41825,
+    "val_accuracy": 0.84146,
+    "lr": 0.0005118
+  },
+  "note_best_checkpoint": "Ultralytics saves best.pt at the epoch with the highest validation fitness (top-1 accuracy for classification).",
+  "weights": {
+    "best": "models/agrisort_good_rotten_v1.pt",
+    "run_dir": "runs/classify/agrisort_good_rotten_v1"
+  },
+  "test_set_used": false,
+  "best_pt_revalidated_val_accuracy": 0.84146,
+  "log_note": "An 11th callback row (Ultralytics' post-training re-validation of best.pt, val_acc 0.84146) was removed from epoch_metrics.csv; the script now skips it."
+}

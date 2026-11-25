@@ -56,4 +56,4 @@ python -m pytest tests -q        # run tests (they use a temporary DB via AGRISO
 - **Never assign Damaged or Rotten labels automatically.** Labels come from people using `labelling/label_tool.py`, which saves to `data/labels/`. Never edit or delete label files without asking.
 - Splits must be group-aware (capture bursts plus near-duplicates). `summary.json` must report `groups_split_across_sets == 0`.
 - Pipeline: `scripts/fruitnet_extract.py` → `fruitnet_audit.py` → labelling tool → `merge_labels.py` → `build_yolo_dataset.py`.
-- Proposed training config (compatibility verified, not yet run): YOLO11n-cls, `device="mps"`, imgsz 224, 10 epochs, batch 16. Training needs the user's explicit approval.
+- Model v1 (`models/agrisort_good_rotten_v1.pt`, not in git) has been trained: 2-class Good vs Rotten, YOLO11n-cls, MPS, imgsz 224, 10 epochs, batch 16, `cls_pw=1.0`. The real results are in `reports/agrisort_good_rotten_v1/REPORT.md`. Never quote metrics from anywhere else. Never use the test split for tuning. Any new training run needs the user's approval and a new `--name`.
