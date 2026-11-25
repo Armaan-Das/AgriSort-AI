@@ -131,8 +131,33 @@ data/processed/fruitnet_cls/
 | Apple extraction (2,403 images) | ✅ Done |
 | Audit | ✅ Done (results above) |
 | Labelling tool | ✅ Ready and tested |
-| Human labels | ⏳ **0 labelled so far** |
-| `data/processed/fruitnet_cls/` | ⏳ Not built yet (needs labels) |
+| Human labels | ✅ Round 1 done: 730 images (see section 8) |
+| `data/processed/fruitnet_cls/` | ⏳ Not built yet (awaiting approval of the training strategy) |
 | Model training | ⛔ Not started (awaiting approval) |
 
-Final per-class and per-split counts will be added here after labelling and the dataset build.
+## 8. Labelling round 1: assessment (25 November 2026)
+
+Annotator AD labelled 730 images between 21:36 and 22:03. All rows were saved and validated: no duplicates, no unknown image IDs, no invalid labels and **0 merge conflicts**. A checksummed backup is in `data/backups/labels_20261125-220522/` (not tracked by git).
+
+**Labels compared with the original FruitNet folders:**
+
+| Label | From FruitNet "Good" folder | From FruitNet "Bad" folder | Total | Leakage groups | Capture sessions |
+|---|---|---|---|---|---|
+| Good | 169 | 0 | **169** | 65 | 68 |
+| Damaged | 58 | 12 | **70** | 41 | 46 |
+| Rotten | 86 | 287 | **373** | 68 | 75 |
+| Exclude | 114 | 4 | 118 | 46 | 52 |
+
+Coverage so far: 427 of 1,149 Good-folder images, 303 of 1,141 Bad-folder images, and 0 of 113 Mixed images.
+
+**Findings:**
+- **Clearly damaged apples are rare in FruitNet.** Only 12 Bad-folder images were labelled Damaged (6 groups, 6 of the images being one apple). That's about 4% of the Bad images reviewed.
+- **144 Good-folder images were labelled Damaged or Rotten.** In a thumbnail review, most of them showed no clear defect: they looked like normal green or yellow apples with russet or speckles. They're listed for an optional human re-check in `data/interim/review_round1_flagged.csv`. **No labels were changed automatically.**
+- The largest group (group 65, 226 images in total, from the green-apple sessions) contains 79 non-Exclude labels across three classes. Group-aware splitting keeps all of it in one split.
+
+**Simulated group-aware 70/15/15 split** (all usable images, no balancing; 0 groups split across sets):
+
+| Option | Train | Val | Test |
+|---|---|---|---|
+| 3-class (Good / Damaged / Rotten) | 117 / 48 / 264 | 29 / 12 / 51 | 23 / 10 / 58 |
+| 2-class (Good / Rotten) | 117 / 262 | 26 / 56 | 26 / 55 |

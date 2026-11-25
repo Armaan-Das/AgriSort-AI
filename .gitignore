@@ -88,3 +88,6 @@ wandb/
 .DS_Store
 .vscode/
 .idea/
+
+# Local backups of annotation files (the labels themselves are tracked in data/labels/)
+data/backups/
