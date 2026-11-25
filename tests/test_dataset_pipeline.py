@@ -97,6 +97,30 @@ def test_full_pipeline(data_dir, monkeypatch):
     at2.run()
     assert "Not labelled yet" in "".join(m.value for m in at2.markdown)
 
+    # review mode: confirm one flagged label, correct another; originals are logged
+    flagged_rows = [r for r in rows if r["label"] in ("Damaged", "Rotten")][:2]
+    with open(data_dir / "labels" / "review_round1_flagged.csv", "w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=["image_id", "label", "source_quality", "reason"])
+        w.writeheader()
+        for r in flagged_rows:
+            w.writerow({"image_id": r["image_id"], "label": r["label"],
+                        "source_quality": r["source_quality"], "reason": "test"})
+    at3 = AppTest.from_file(str(ROOT / "labelling" / "label_tool.py"), default_timeout=30)
+    at3.run()
+    at3.radio(key="queue").set_value("Review").run()
+    at3.text_input(key="annotator").input("R").run()
+    assert "0 / 2 reviewed" in at3.get("progress")[0].proto.text
+    at3.button(key="btn_confirm").click().run()          # keep label
+    at3.button(key="btn_Exclude").click().run()          # change label
+    assert not at3.exception, at3.exception
+    assert "2 / 2 reviewed" in at3.get("progress")[0].proto.text
+    with open(data_dir / "labels" / "review_round1_decisions.csv") as f:
+        decisions = {d["decision"] for d in csv.DictReader(f)}
+    assert decisions == {"confirmed", "changed"}
+    with open(data_dir / "labels" / "fruitnet_labels_all.csv") as f:
+        rows = list(csv.DictReader(f))
+    assert len(rows) == 49 and sum(r["label"] == "Exclude" for r in rows) == 2  # 1 earlier + 1 changed
+
     # batch file + conflicting label is detected by merge
     batch_file = data_dir / "labels" / "fruitnet_labels_batch1.csv"
     first = rows[0]

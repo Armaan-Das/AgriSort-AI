@@ -54,6 +54,13 @@ QUEUES = {
     "Good": "FruitNet 'Good' folder → verify Good",
     "Mixed": "FruitNet 'Mixed' folder (mostly Exclude)",
 }
+# Review mode: re-check a list of flagged images. Every decision is logged with the
+# original label, and the reviewed label becomes the label used for training.
+REVIEW_LIST = LABELS_DIR / "review_round1_flagged.csv"
+REVIEW_LOG = LABELS_DIR / "review_round1_decisions.csv"
+REVIEW_FIELDS = ["image_id", "original_label", "reviewed_label", "decision", "annotator", "reviewed_at"]
+if REVIEW_LIST.exists():
+    QUEUES = {"Review": "Review flagged images (round 1)", **QUEUES}
 GUIDELINES = """
 **Good** – no significant visible damage or decay.
 
@@ -116,13 +123,19 @@ with st.sidebar:
     annotator = st.text_input("Annotator name / initials", key="annotator",
                               placeholder="e.g. AD").strip()
     queue = st.radio("Images to label", list(QUEUES), format_func=QUEUES.get, key="queue")
-    batch = st.selectbox(
-        "Batch", ["all"] + [str(b) for b in range(1, NUM_BATCHES + 1)],
-        format_func=lambda b: "All images (one person)" if b == "all" else f"Batch {b} of {NUM_BATCHES}",
-        key="batch",
-        help="Batches are fixed and non-overlapping, so up to six people can label in parallel. "
-             "Each batch saves to its own CSV; merge them with scripts/merge_labels.py.",
-    )
+    review_mode = queue == "Review"
+    if review_mode:
+        batch = "all"
+        st.caption("Review mode: **1–4** sets the label · **Enter** confirms the current label. "
+                   f"Decisions are logged in `{REVIEW_LOG.name}` with the original label.")
+    else:
+        batch = st.selectbox(
+            "Batch", ["all"] + [str(b) for b in range(1, NUM_BATCHES + 1)],
+            format_func=lambda b: "All images (one person)" if b == "all" else f"Batch {b} of {NUM_BATCHES}",
+            key="batch",
+            help="Batches are fixed and non-overlapping, so up to six people can label in parallel. "
+                 "Each batch saves to its own CSV; merge them with scripts/merge_labels.py.",
+        )
     label_path = label_file_for(batch)
     st.caption(f"Saving to `{label_path.relative_to(LABELS_DIR.parents[1])}`")
 
@@ -139,20 +152,30 @@ with st.sidebar:
     st.caption("Keys: **1** Good · **2** Damaged · **3** Rotten · **4** Exclude · "
                "**←/→** navigate · **N** next unlabelled")
 
-items = [r for r in images if r["source_quality"] == queue and (batch == "all" or r["batch"] == batch)]
+if review_mode:
+    flagged = {r["image_id"]: r for r in read_csv(REVIEW_LIST)}
+    items = [r for r in images if r["image_id"] in flagged]
+else:
+    flagged = {}
+    items = [r for r in images if r["source_quality"] == queue and (batch == "all" or r["batch"] == batch)]
 if not items:
     st.info("No images in this selection.")
     st.stop()
 
 labels = load_labels(label_path)
+reviews = {r["image_id"]: r for r in read_csv(REVIEW_LOG)} if review_mode else {}
 pos_key = f"pos::{queue}::{batch}"
+
+
+def is_done(image_id: str) -> bool:
+    return image_id in (reviews if review_mode else labels)
 
 
 def first_unlabelled(start: int = 0) -> int | None:
     n = len(items)
     for k in range(n):
         i = (start + k) % n
-        if items[i]["image_id"] not in labels:
+        if not is_done(items[i]["image_id"]):
             return i
     return None
 
@@ -169,11 +192,22 @@ def save_label(label: str) -> None:
         st.session_state["flash"] = ("warning", "Enter your name / initials in the sidebar first.")
         return
     item = items[st.session_state[pos_key]]
+    now = datetime.now().isoformat(timespec="seconds")
+    who = st.session_state["annotator"].strip()
+    if review_mode:  # log the decision first, keeping the original label
+        log = {r["image_id"]: r for r in read_csv(REVIEW_LOG)}
+        original = flagged[item["image_id"]]["label"]
+        log[item["image_id"]] = {
+            "image_id": item["image_id"], "original_label": original, "reviewed_label": label,
+            "decision": "confirmed" if label == original else "changed",
+            "annotator": who, "reviewed_at": now,
+        }
+        write_csv_atomic(REVIEW_LOG, list(log.values()), REVIEW_FIELDS)
+        reviews.update(log)
     current = load_labels(label_path)  # re-read from disk so nothing is overwritten
     current[item["image_id"]] = {
         "image_id": item["image_id"], "label": label, "source_quality": item["source_quality"],
-        "annotator": st.session_state["annotator"].strip(),
-        "labelled_at": datetime.now().isoformat(timespec="seconds"),
+        "annotator": who, "labelled_at": now,
     }
     write_csv_atomic(label_path, list(current.values()), LABEL_FIELDS)
     labels.update(current)
@@ -198,11 +232,12 @@ def jump_unlabelled() -> None:
 # ---------------------------------------------------------------------------
 pos = st.session_state[pos_key]
 item = items[pos]
-done = sum(r["image_id"] in labels for r in items)
+done = sum(is_done(r["image_id"]) for r in items)
 remaining = len(items) - done
+verb = "reviewed" if review_mode else "labelled"
 
 st.markdown(f"#### {QUEUES[queue]} · {'all images' if batch == 'all' else f'batch {batch}'}")
-st.progress(done / len(items), text=f"**{done} / {len(items)} labelled** · {remaining} remaining")
+st.progress(done / len(items), text=f"**{done} / {len(items)} {verb}** · {remaining} remaining")
 
 if flash := st.session_state.pop("flash", None):
     kind, msg = flash
@@ -226,6 +261,15 @@ with col_ctl:
     else:
         st.markdown('<span class="lt-meta">Not labelled yet</span>', unsafe_allow_html=True)
 
+    if review_mode:
+        original = flagged[item["image_id"]]["label"]
+        rev = reviews.get(item["image_id"])
+        status = (f"✅ Reviewed: **{rev['decision']}** ({rev['original_label']} → {rev['reviewed_label']})"
+                  if rev else "⏳ Not reviewed yet")
+        st.info(f"Original label: **{original}**. Flagged because no clear defect was visible "
+                f"in a thumbnail check. Please confirm or correct it.\n\n{status}",
+                icon=":material/flag:")
+
     if item["cross_folder_conflict"] == "True":
         st.warning("A near-identical image exists in a different FruitNet folder. Check carefully.",
                    icon=":material/compare:")
@@ -239,6 +283,11 @@ with col_ctl:
                   shortcut=SHORTCUTS[name], width="stretch",
                   type="primary" if existing and existing["label"] == name else "secondary")
 
+    if review_mode and existing:
+        st.button(f"Confirm current label ({existing['label']})", key="btn_confirm",
+                  icon=":material/check:", on_click=save_label, args=(existing["label"],),
+                  shortcut="Enter", width="stretch")
+
     st.write("")
     n1, n2 = st.columns(2)
     n1.button("Previous", icon=":material/arrow_back:", on_click=move, args=(-1,),
@@ -249,4 +298,4 @@ with col_ctl:
               shortcut="N", width="stretch", disabled=remaining == 0)
 
     if remaining == 0:
-        st.success("Every image in this selection is labelled.", icon=":material/task_alt:")
+        st.success(f"Every image in this selection is {verb}.", icon=":material/task_alt:")
