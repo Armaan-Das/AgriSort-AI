@@ -58,10 +58,14 @@ def main() -> None:
                     help="also use unlabelled images from FruitNet's Good folder as Good (unverified)")
     ap.add_argument("--min-per-class", type=int, default=20,
                     help="refuse to build if any class has fewer images than this")
+    ap.add_argument("--classes", nargs="+", default=TARGET_CLASSES, choices=TARGET_CLASSES,
+                    help="classes to include, e.g. --classes Good Rotten. Images with other labels "
+                         "(e.g. Damaged) are left out of THIS dataset; their labels stay untouched.")
     ap.add_argument("--seed", type=int, default=42)
     args = ap.parse_args()
     if abs(sum(args.split) - 1) > 1e-6:
         raise SystemExit("--split values must add up to 1")
+    classes = [c for c in TARGET_CLASSES if c in args.classes]
 
     images = {r["image_id"]: r for r in read_csv(IMAGES_CSV)}
     if not images:
@@ -77,7 +81,7 @@ def main() -> None:
         if img["readable"] != "True" or img["exact_dup_of"]:
             continue
         label = human.get(image_id)
-        if label in TARGET_CLASSES:
+        if label in classes:
             selected[image_id] = (label, True)
         elif label is None and args.use_source_good and img["source_quality"] == "Good":
             selected[image_id] = ("Good", False)
@@ -94,9 +98,9 @@ def main() -> None:
     for gid in groups:
         by_class[group_class(gid)].append(gid)
 
-    available = {c: sum(len(groups[g]) for g in by_class[c]) for c in TARGET_CLASSES}
-    print("Available human-verified (+ optional unverified Good) images:", available)
-    too_small = [c for c in TARGET_CLASSES if available[c] < args.min_per_class]
+    available = {c: sum(len(groups[g]) for g in by_class[c]) for c in classes}
+    print("Usable images, counted by each group's majority class:", available)
+    too_small = [c for c in classes if available[c] < args.min_per_class]
     if too_small:
         raise SystemExit(f"Not enough images for {too_small} (minimum {args.min_per_class}). "
                          "Label more images first.")
@@ -108,7 +112,7 @@ def main() -> None:
         cap = int(min(available.values()) * args.ratio)
     if args.max_per_class:
         cap = min(cap or args.max_per_class, args.max_per_class)
-    for c in TARGET_CLASSES:
+    for c in classes:
         gids = sorted(by_class[c], key=int)
         rng.shuffle(gids)
         # prefer verified images first when capping
@@ -125,7 +129,7 @@ def main() -> None:
 
     # ---- stratified, group-aware split ------------------------------------
     assignment = {}
-    for c in TARGET_CLASSES:
+    for c in classes:
         gids = by_class[c][:]
         rng.shuffle(gids)
         gids.sort(key=lambda g: -len(groups[g]))  # place big groups first
@@ -153,7 +157,7 @@ def main() -> None:
                          "path": dest.relative_to(PROCESSED_DIR).as_posix()})
     write_csv_atomic(PROCESSED_DIR / "manifest.csv", manifest, list(manifest[0].keys()))
 
-    table = {s: {c: 0 for c in TARGET_CLASSES} for s in SPLITS}
+    table = {s: {c: 0 for c in classes} for s in SPLITS}
     for m in manifest:
         table[m["split"]][m["label"]] += 1
     leak = collections.defaultdict(set)
@@ -166,7 +170,7 @@ def main() -> None:
         "label_files": info["files"],
         "label_conflicts_excluded": info["conflicting_images"],
         "counts": table,
-        "totals_per_class": {c: sum(table[s][c] for s in SPLITS) for c in TARGET_CLASSES},
+        "totals_per_class": {c: sum(table[s][c] for s in SPLITS) for c in classes},
         "total_images": len(manifest),
         "unverified_images": sum(not m["human_verified"] for m in manifest),
         "groups_split_across_sets": sum(len(v) > 1 for v in leak.values()),
@@ -174,9 +178,9 @@ def main() -> None:
     (PROCESSED_DIR / "summary.json").write_text(json.dumps(summary, indent=2))
 
     print(f"\nWrote {len(manifest)} images to {PROCESSED_DIR}")
-    print(f"{'':8s}" + "".join(f"{c:>9s}" for c in TARGET_CLASSES) + f"{'Total':>9s}")
+    print(f"{'':8s}" + "".join(f"{c:>9s}" for c in classes) + f"{'Total':>9s}")
     for s in SPLITS:
-        print(f"{s:8s}" + "".join(f"{table[s][c]:9d}" for c in TARGET_CLASSES)
+        print(f"{s:8s}" + "".join(f"{table[s][c]:9d}" for c in classes)
               + f"{sum(table[s].values()):9d}")
     print(f"Unverified images: {summary['unverified_images']} · "
           f"groups split across sets: {summary['groups_split_across_sets']}")

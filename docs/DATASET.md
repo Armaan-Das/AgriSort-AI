@@ -131,8 +131,8 @@ data/processed/fruitnet_cls/
 | Apple extraction (2,403 images) | ✅ Done |
 | Audit | ✅ Done (results above) |
 | Labelling tool | ✅ Ready and tested |
-| Human labels | ✅ Round 1 done: 730 images (see section 8) |
-| `data/processed/fruitnet_cls/` | ⏳ Not built yet (awaiting approval of the training strategy) |
+| Human labels | ✅ Round 1 (730 images) + review of 144 flagged images (sections 8–9) |
+| `data/processed/fruitnet_cls/` | ✅ 2-class Good / Rotten, 538 images, leakage check passed (section 9) |
 | Model training | ⛔ Not started (awaiting approval) |
 
 ## 8. Labelling round 1: assessment (25 November 2026)
@@ -161,3 +161,45 @@ Coverage so far: 427 of 1,149 Good-folder images, 303 of 1,141 Bad-folder images
 |---|---|---|---|
 | 3-class (Good / Damaged / Rotten) | 117 / 48 / 264 | 29 / 12 / 51 | 23 / 10 / 58 |
 | 2-class (Good / Rotten) | 117 / 262 | 26 / 56 | 26 / 55 |
+
+## 9. Flagged-image review and the final 2-class dataset (25 November 2026)
+
+**Review.** AD reviewed all 144 flagged images between 22:17 and 22:24 using the tool's review mode: **123 confirmed and 21 changed**. Every decision, with its original label, is in `data/labels/review_round1_decisions.csv`.
+
+| Change | Count |
+|---|---|
+| Rotten → Rotten (confirmed) | 73 |
+| Damaged → Damaged (confirmed) | 50 |
+| Rotten → Exclude | 7 |
+| Damaged → Good | 4 |
+| Rotten → Damaged | 3 |
+| Rotten → Good | 3 |
+| Damaged → Exclude | 2 |
+| Damaged → Rotten | 2 |
+
+**Labels after the review:** Good 176, **Damaged 65 (kept for the planned 3-class model)**, Rotten 362, Exclude 127. Backups are in `data/backups/labels_pre_review_*` and `labels_post_review_*`, and the label history is in git.
+
+**Stricter leakage grouping.** The first split check found one validation image showing **the same apple** as a training image, taken 17 s later (perceptual-hash distance 8). The audit was re-run with `--session-gap 20 --threshold 8`, giving 3,892 near-duplicate pairs, 97 capture bursts and **89 leakage groups**. Labels weren't affected; only the groups, batches and labelling order changed.
+
+**Final dataset:** `python scripts/build_yolo_dataset.py --classes Good Rotten` (no balancing, nothing discarded), then `python scripts/verify_split.py`.
+
+| Split | Good | Rotten | Total | Leakage groups | Capture sessions |
+|---|---|---|---|---|---|
+| train | 117 | 259 | 376 | 29 (Good 18, Rotten 19) | 35 |
+| val | 32 | 50 | 82 | 19 (11 / 11) | 19 |
+| test | 27 | 53 | 80 | 17 (10 / 10) | 17 |
+| **Total** | **176** | **362** | **538** | | |
+
+Achieved split per class: Good 66 / 18 / 15 %, Rotten 72 / 14 / 15 %.
+
+**Verification (`verification.json`): PASSED.**
+- 0 groups, 0 capture sessions, 0 near-duplicate pairs and 0 identical files shared between splits.
+- No val or test image is within perceptual-hash distance 10 of a training image (the closest is 12).
+- 51 val/test images were taken 27–60 s after a training image. The 12 closest pairs were inspected and all show different apples from the same photo session, so they share a setting, not an apple.
+
+**Known limitations:**
+1. **Small test set:** 80 images from only 17 independent groups (10 Good, 10 Rotten). Metrics will have wide uncertainty.
+2. **Setting and camera bias:** 217 Rotten images come from a ZUK Z2 Plus session with no Good images from that camera, and most Rotten images are hand-held against a wall. The model could learn the setting instead of decay. Check on new photos before claiming it generalises.
+3. **Imbalance of 1 Good to 2.1 Rotten:** handled with class-weighted loss, not by discarding images.
+4. **Single annotator:** no measure of agreement between annotators yet.
+5. **Groups are approximate:** the same apple photographed more than 20 s apart from a different angle can't be detected automatically.
