@@ -1,0 +1,90 @@
+# ---------------------------------------------------------------------------
+# Python
+# ---------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+build/
+dist/
+.ipynb_checkpoints/
+
+# ---------------------------------------------------------------------------
+# Virtual environments
+# ---------------------------------------------------------------------------
+.venv/
+venv/
+env/
+
+# ---------------------------------------------------------------------------
+# Credentials and secrets (never commit)
+# ---------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+*.pem
+*.key
+*.p12
+credentials*.json
+secrets*.json
+kaggle.json
+.claude/settings.local.json
+
+# ---------------------------------------------------------------------------
+# Databases (local, contain user upload metadata)
+# ---------------------------------------------------------------------------
+data/agrisort.db
+*.db
+*.sqlite
+*.sqlite3
+
+# ---------------------------------------------------------------------------
+# Datasets (large / licensed separately / regenerable)
+# data/labels/ IS tracked: the human labels are original project work.
+# ---------------------------------------------------------------------------
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+data/downloads/
+data/interim/
+*.zip
+*.rar
+*.7z
+*.tar
+*.tar.gz
+
+# ---------------------------------------------------------------------------
+# Model weights and training outputs
+# ---------------------------------------------------------------------------
+models/*
+!models/.gitkeep
+runs/
+*.pt
+*.pth
+*.onnx
+*.mlpackage/
+*.mlmodel
+*.safetensors
+wandb/
+
+# ---------------------------------------------------------------------------
+# Temporary files and logs
+# ---------------------------------------------------------------------------
+*.tmp
+*.log
+*.swp
+*~
+.~lock.*
+
+# ---------------------------------------------------------------------------
+# OS / editor
+# ---------------------------------------------------------------------------
+.DS_Store
+.vscode/
+.idea/

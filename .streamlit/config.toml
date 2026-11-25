@@ -1,0 +1,17 @@
+# Streamlit theme and server settings for AgriSort AI.
+# Streamlit reads this file automatically when you run the app from the project root.
+
+[theme]
+base = "light"
+primaryColor = "#2E7D32"              # agricultural green (buttons, highlights)
+backgroundColor = "#FAFBF8"
+secondaryBackgroundColor = "#EEF3EA"  # sidebar and input backgrounds
+textColor = "#1B2A1E"
+font = "sans serif"
+
+[server]
+maxUploadSize = 10                     # MB - matches MAX_UPLOAD_MB in app/core/config.py
+headless = true
+
+[browser]
+gatherUsageStats = false

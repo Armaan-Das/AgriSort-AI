@@ -1,0 +1,59 @@
+# CLAUDE.md: AgriSort AI
+
+Guidance for AI-assisted development on this project.
+
+## Project
+
+AgriSort AI is a **software-only**, AI-powered Streamlit web app that analyses apple images and classifies visible quality as **Good**, **Damaged** or **Rotten**. It's an academic engineering project. Prioritise a small, working, demonstrable prototype over breadth.
+
+## Hard scope rules
+
+- Software only. **No** IoT, Arduino, ESP32, Raspberry Pi, sensors, conveyor belts or physical sorting.
+- Stack: Python 3.12, Streamlit (UI), PyTorch + Ultralytics YOLO (ML), OpenCV (image processing), SQLite (database), Plotly (charts).
+- Don't add other frameworks or services without asking.
+
+## Honesty rules (critical)
+
+- **Never fabricate** ML predictions, datasets, labels or evaluation metrics.
+- **Never claim the model is trained** until training has actually run and produced weights in `models/`.
+- UI placeholders must say clearly that the model isn't trained. Charts must only plot real saved records. When there's no data, show an empty-state message, not sample numbers.
+- `core/classifier.py::predict()` deliberately raises `NotImplementedError` until a real model is integrated. Keep it that way until then.
+- Report metrics only from a real held-out test set, and say which dataset and split were used.
+
+## Environment rules
+
+- Machine: MacBook Air M4, 16 GB RAM, macOS, Apple Silicon (arm64). Use `device="mps"` for PyTorch/YOLO training when available.
+- Virtual environment: `.venv` (Python 3.12.16). **Never delete, recreate or modify `.venv`** except by installing packages the user has approved.
+- Don't overwrite existing files without reading them first.
+- Pin any new dependency in `requirements.txt`.
+
+## Code layout
+
+- `app/main.py`: entry point (`st.set_page_config`, `init_db()`, `st.navigation`, sidebar).
+- `app/views/`: one file per page. (It's named `views/`, not `pages/`, to avoid Streamlit's automatic `pages/` handling.)
+- `app/components/ui.py`: shared CSS and UI helpers. Escape any user text inserted into HTML.
+- `app/core/`: non-UI logic: `config.py` (paths, classes, colours), `database.py`, `image_utils.py`, `classifier.py`.
+- Imports are relative to `app/` (for example `from core.config import ...`), because Streamlit adds the script's folder to `sys.path`.
+- Datasets go in `data/raw` and `data/processed`. Model weights go in `models/`. Training scripts go in `scripts/`. All of these are gitignored.
+
+## Commands
+
+```bash
+streamlit run app/main.py        # run the app (from the project root)
+python -m pytest tests -q        # run tests (they use a temporary DB via AGRISORT_DB_PATH)
+```
+
+## Working style
+
+- The user is a beginner. Explain what you're doing and why in plain language.
+- Work incrementally. Verify the app runs (tests plus `streamlit run`) after each change, before moving on.
+- Use current Streamlit APIs (`width="stretch"`, not the deprecated `use_container_width`).
+- Keep the UI professional and modern, suitable for an academic demo.
+
+## Dataset rules
+
+- Dataset: FruitNet apples (CC BY 4.0), relabelled by people. The source, licence, attribution and audit results are in `docs/DATASET.md`. Keep that file up to date.
+- **Never assign Damaged or Rotten labels automatically.** Labels come from people using `labelling/label_tool.py`, which saves to `data/labels/`. Never edit or delete label files without asking.
+- Splits must be group-aware (capture bursts plus near-duplicates). `summary.json` must report `groups_split_across_sets == 0`.
+- Pipeline: `scripts/fruitnet_extract.py` → `fruitnet_audit.py` → labelling tool → `merge_labels.py` → `build_yolo_dataset.py`.
+- Proposed training config (compatibility verified, not yet run): YOLO11n-cls, `device="mps"`, imgsz 224, 10 epochs, batch 16. Training needs the user's explicit approval.
