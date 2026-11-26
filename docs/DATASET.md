@@ -1,6 +1,20 @@
 # AgriSort AI dataset card: FruitNet apples (manually relabelled)
 
-*Last updated: 25 November 2026. Status: images downloaded, verified and audited. Human labelling not started yet. No model has been trained.*
+*Last updated: 26 November 2026. Status:*
+- *Images downloaded, verified and audited.*
+- *Labelling round 1 (730 images) and the review of 144 flagged images are complete.*
+- *The 2-class Good / Rotten dataset is built, and its leakage check passed.*
+- *Model v1 is trained and evaluated (see [`reports/agrisort_good_rotten_v1/REPORT.md`](../reports/agrisort_good_rotten_v1/REPORT.md)).*
+
+## What this repository contains, and what it doesn't
+
+| Included in git | Not included (download it yourself, see section 2) |
+|---|---|
+| Human annotations: `data/labels/*.csv`, CC BY 4.0 | The FruitNet dataset (zip, extracted images, processed splits) |
+| The trained model, `models/agrisort_good_rotten_v1.pt` | Audit outputs in `data/interim/` |
+| **A small number of FruitNet images shown inside report figures**: Ultralytics batch previews in `reports/agrisort_good_rotten_v1/ultralytics/`, the error grid `test_evaluation/misclassified.jpg`, and the app screenshots in `docs/screenshots/`. These are used under CC BY 4.0 with the attribution in section 1 and in [`NOTICE.md`](../NOTICE.md). | |
+
+**You don't need the dataset to run the app or make predictions.** You only need it to reproduce the labelling, training or evaluation.
 
 ## 1. Source and licence
 
@@ -11,12 +25,12 @@
 | Repository | Mendeley Data: https://data.mendeley.com/datasets/b6fftwbr2v/3 |
 | DOI | 10.17632/b6fftwbr2v.3 |
 | Paper | V. Meshram, K. Patil, *FruitNet: Indian fruits image dataset with quality for machine learning applications*, Data in Brief 40 (2022) 107686. https://doi.org/10.1016/j.dib.2021.107686 |
-| Licence | **CC BY 4.0** (Creative Commons Attribution 4.0 International), as stated on the Mendeley Data record |
+| Licence | **CC BY 4.0** (Creative Commons Attribution 4.0 International), as stated on the Mendeley Data record. Re-checked on 26 November 2026: the record (version 3, published 8 March 2022) still says CC BY 4.0 |
 | Provenance | The authors photographed the fruit themselves on mobile phones. These are not images collected from the web. |
 
 **Required attribution.** Use this text on any page, report or slide that uses the data:
 
-> Apple images from FruitNet (Meshram & Patil, 2022), Mendeley Data, DOI 10.17632/b6fftwbr2v.3, licensed under CC BY 4.0. Images were relabelled by the AgriSort AI team into Good / Damaged / Rotten; the original labels were Good / Bad / Mixed.
+> Apple images from FruitNet (Meshram & Patil, 2022), Mendeley Data, DOI 10.17632/b6fftwbr2v.3, licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Images were relabelled by the AgriSort AI team into Good / Damaged / Rotten; the original labels were Good / Bad / Mixed.
 
 CC BY 4.0 requires attribution and a statement that changes were made. Relabelling counts as a change, which is why the text above mentions it.
 
@@ -133,7 +147,8 @@ data/processed/fruitnet_cls/
 | Labelling tool | ✅ Ready and tested |
 | Human labels | ✅ Round 1 (730 images) + review of 144 flagged images (sections 8–9) |
 | `data/processed/fruitnet_cls/` | ✅ 2-class Good / Rotten, 538 images, leakage check passed (section 9) |
-| Model training | ⛔ Not started (awaiting approval) |
+| Model training and evaluation | ✅ Model v1 (YOLO11n-cls, Good / Rotten) trained on 25 November 2026 and evaluated once on the held-out test set. See [`reports/agrisort_good_rotten_v1/REPORT.md`](../reports/agrisort_good_rotten_v1/REPORT.md) |
+| Damaged class (3-class model) | ⏳ Planned: 65 Damaged labels so far, more needed |
 
 ## 8. Labelling round 1: assessment (25 November 2026)
 

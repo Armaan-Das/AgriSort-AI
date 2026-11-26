@@ -4,9 +4,9 @@ This is a standalone Streamlit app for checking FruitNet apple images by hand. I
 
 ## Launch
 
+From the project root, with the virtual environment activated (see the main README):
+
 ```bash
-cd ~/Developer/AgriSort-AI
-source .venv/bin/activate
 streamlit run labelling/label_tool.py --server.port 8502
 ```
 

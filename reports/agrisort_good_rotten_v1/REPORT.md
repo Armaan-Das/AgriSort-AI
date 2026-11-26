@@ -7,7 +7,7 @@
 | Item | Value |
 |---|---|
 | Task | Image classification: **Good** vs **Rotten** apple (the Damaged class is planned for the final project) |
-| Model | YOLO11n-cls (2.8 M parameters), **transfer learning** from ImageNet-pretrained `yolo11n-cls.pt` (234 of 236 weight tensors transferred; the new 2-class output layer was trained from scratch) |
+| Model | YOLO11n-cls (1,533,666 parameters with the 2-class head, per `train_log.txt`; the 1000-class ImageNet version has 2.8 M), **transfer learning** from ImageNet-pretrained `yolo11n-cls.pt` (234 of 236 weight tensors transferred; the new 2-class output layer was trained from scratch) |
 | Data | `data/processed/fruitnet_cls/`: FruitNet apples (CC BY 4.0), relabelled by hand, group-aware split, leakage check passed (see `docs/DATASET.md` §9) |
 | Split | train 376 (Good 117 / Rotten 259) · val 82 (32 / 50) · **test 80 (27 / 53), 17 independent groups** |
 | Settings | imgsz 224, 10 epochs, batch 16, seed 42, `deterministic=True`, optimizer auto → AdamW (lr 0.001667), Ultralytics default classification augmentation (RandAugment, random erasing 0.4, horizontal flip) |
@@ -128,4 +128,6 @@ Results may vary slightly between runs on MPS, even with a fixed seed, because s
 | `train_log_attempt1_crashed.txt` | First attempt: crashed in epoch 1 because of a bug in our logging code (not the model). The run was discarded and restarted. |
 | `ultralytics/` | Ultralytics' own `results.csv`, `results.png`, validation confusion matrices and batch previews |
 | `test_evaluation/` | `metrics.json`, `predictions.csv` (every test prediction), `confusion_matrix.png`, `misclassified.jpg` |
-| Weights (not in git) | `models/agrisort_good_rotten_v1.pt` (= `runs/classify/agrisort_good_rotten_v1/weights/best.pt`, 3.2 MB) |
+| Weights (in git) | `models/agrisort_good_rotten_v1.pt` (3.2 MB): the epoch-8 `best.pt` checkpoint, with local folder paths removed from its metadata. The weights are unchanged and give identical predictions. See [`models/README.md`](../../models/README.md) |
+
+**Note on publication.** Before this repository was made public, the local absolute folder path in `train_log*.txt`, `training_summary.json` and `ultralytics/args.yaml` was replaced with `<project-root>`. No other values in these files were changed.

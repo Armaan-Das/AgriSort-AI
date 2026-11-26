@@ -23,7 +23,7 @@ train, test, data, ver, epochs = rep["training"], rep["test"], rep["dataset"], r
 
 # ---------------------------------------------------------------------------
 c1, c2, c3, c4 = st.columns(4)
-c1.metric("Model", "YOLO11n-cls", border=True, help="2.8 M parameters, Ultralytics")
+c1.metric("Model", "YOLO11n-cls", border=True, help="1.53 M parameters (2-class head), Ultralytics")
 c2.metric("Classes", " / ".join(MODEL_CLASSES), border=True,
           help=f"Planned for the final model: {', '.join(PLANNED_CLASSES)}")
 c3.metric("Status", "Ready" if is_model_available() else "Weights missing", border=True, help=model_status())
