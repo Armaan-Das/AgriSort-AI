@@ -72,6 +72,10 @@ runs/
 *.mlmodel
 *.safetensors
 wandb/
+# The released model v1 (3.2 MB, metadata cleaned) and its model card ARE tracked,
+# so a fresh clone can make real predictions. Pretrained/experimental weights stay local.
+!models/agrisort_good_rotten_v1.pt
+!models/README.md
 
 # ---------------------------------------------------------------------------
 # Temporary files and logs
@@ -91,3 +95,8 @@ wandb/
 
 # Local backups of annotation files (the labels themselves are tracked in data/labels/)
 data/backups/
+
+# Git backups (bundles/mirrors) and Playwright artefacts, in case they are created here
+*.bundle
+playwright-report/
+test-results/
